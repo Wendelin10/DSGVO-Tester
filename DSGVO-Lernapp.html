@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSGVO Lern-App</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6fa; color: #222; margin: 0; }
+        .container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 32px; }
+        h1, h2 { color: #2a5d9f; }
+        .step { display: none; }
+        .step.active { display: block; }
+        .btn { background: #2a5d9f; color: #fff; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 1rem; margin: 12px 0; }
+        .btn:disabled { background: #b0c4de; cursor: not-allowed; }
+        .choices { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+        .choice { background: #e3eaf6; border: 1px solid #b0c4de; border-radius: 6px; padding: 10px 18px; cursor: pointer; transition: background 0.2s; }
+        .choice.selected { background: #2a5d9f; color: #fff; }
+        .dragzone { min-height: 40px; border: 2px dashed #b0c4de; border-radius: 6px; padding: 10px; margin: 10px 0; background: #f8fafc; }
+        .checklist label { display: block; margin: 8px 0; }
+        .result { font-weight: bold; color: #2a5d9f; margin-top: 10px; }
+        .reflection { margin: 16px 0; }
+        .footer { text-align: center; color: #888; margin-top: 32px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="step-0" class="step active">
+        <h1>Willkommen zur DSGVO Lern-App</h1>
+        <p>In dieser Anwendung lernst du die wichtigsten Grundlagen der DSGVO und wie du Datenschutz im Unternehmen praktisch umsetzt.</p>
+        <ul>
+            <li>Was sind personenbezogene Daten?</li>
+            <li>Welche Grundprinzipien gibt es?</li>
+            <li>Wie erkennst du Verstöße?</li>
+            <li>Wie schützt du Daten im Alltag?</li>
+            <li>Deine Verantwortung im Datenschutz</li>
+        </ul>
+        <button class="btn" onclick="nextStep()">Los geht's!</button>
+    </div>
+    <div id="step-1" class="step">
+        <h2>1. Was sind personenbezogene Daten?</h2>
+        <p>Ziehe die Beispiele in das richtige Feld:</p>
+        <div class="choices" id="drag-items">
+            <div class="choice" draggable="true">Name</div>
+            <div class="choice" draggable="true">E-Mail-Adresse</div>
+            <div class="choice" draggable="true">IP-Adresse</div>
+            <div class="choice" draggable="true">Lieblingsfarbe</div>
+            <div class="choice" draggable="true">Schuhgröße</div>
+        </div>
+        <div style="display: flex; gap: 16px;">
+            <div style="flex:1;">
+                <strong>Personenbezogen</strong>
+                <div class="dragzone" id="zone-personal"></div>
+            </div>
+            <div style="flex:1;">
+                <strong>Nicht personenbezogen</strong>
+                <div class="dragzone" id="zone-nonpersonal"></div>
+            </div>
+        </div>
+        <button class="btn" onclick="checkStep1()">Prüfen</button>
+        <div class="result" id="result-step1"></div>
+        <button class="btn" onclick="nextStep()" style="display:none;" id="next1">Weiter</button>
+    </div>
+    <div id="step-2" class="step">
+        <h2>2. Grundprinzipien der DSGVO</h2>
+        <p>Wähle die drei Grundprinzipien aus:</p>
+        <div class="choices" id="principle-choices">
+            <div class="choice">Rechtmäßigkeit der Verarbeitung</div>
+            <div class="choice">Datenminimierung</div>
+            <div class="choice">Integrität und Vertraulichkeit</div>
+            <div class="choice">Kundenfreundlichkeit</div>
+            <div class="choice">Schnelligkeit der Bearbeitung</div>
+        </div>
+        <button class="btn" onclick="checkStep2()">Prüfen</button>
+        <div class="result" id="result-step2"></div>
+        <button class="btn" onclick="nextStep()" style="display:none;" id="next2">Weiter</button>
+    </div>
+    <div id="step-3" class="step">
+        <h2>3. Fallbeispiel: Datenschutz im Alltag</h2>
+        <p><em>Ein Kollege schickt versehentlich eine Liste mit Kundendaten (Name, E-Mail, Telefonnummer) an einen falschen Empfänger. Was ist hier schiefgelaufen?</em></p>
+        <div class="choices" id="case-choices">
+            <div class="choice">Verstoß gegen Integrität und Vertraulichkeit</div>
+            <div class="choice">Alles in Ordnung</div>
+            <div class="choice">Verstoß gegen Datenminimierung</div>
+        </div>
+        <button class="btn" onclick="checkStep3()">Prüfen</button>
+        <div class="result" id="result-step3"></div>
+        <button class="btn" onclick="nextStep()" style="display:none;" id="next3">Weiter</button>
+    </div>
+    <div id="step-4" class="step">
+        <h2>4. Praktische Tipps für den Datenschutz</h2>
+        <p>Klicke an, was du im Alltag tun kannst:</p>
+        <form class="checklist" id="checklist-form">
+            <label><input type="checkbox" name="tip" value="passwort"> Starkes Passwort verwenden</label>
+            <label><input type="checkbox" name="tip" value="bildschirm"> Bildschirm sperren bei Abwesenheit</label>
+            <label><input type="checkbox" name="tip" value="dokumente"> Sensible Dokumente nicht offen liegen lassen</label>
+            <label><input type="checkbox" name="tip" value="kaffee"> Kaffee auf den Schreibtisch stellen</label>
+        </form>
+        <button class="btn" onclick="checkStep4()">Prüfen</button>
+        <div class="result" id="result-step4"></div>
+        <button class="btn" onclick="nextStep()" style="display:none;" id="next4">Weiter</button>
+    </div>
+    <div id="step-5" class="step">
+        <h2>5. Deine Verantwortung</h2>
+        <p>Warum ist Datenschutz für dich persönlich wichtig? Schreibe einen Satz:</p>
+        <textarea id="reflection" class="reflection" rows="3" style="width:100%;"></textarea>
+        <button class="btn" onclick="checkStep5()">Abschließen</button>
+        <div class="result" id="result-step5"></div>
+    </div>
+    <div id="step-6" class="step">
+        <h2>Fertig!</h2>
+        <p>Super, du hast die wichtigsten Grundlagen der DSGVO kennengelernt und weißt, wie du im Alltag zum Datenschutz beiträgst.</p>
+        <p>Danke fürs Mitmachen!</p>
+    </div>
+</div>
+<div class="footer">&copy; 2025 DSGVO Lern-App</div>
+<script>
+let currentStep = 0;
+function showStep(n) {
+    document.querySelectorAll('.step').forEach((el, i) => {
+        el.classList.toggle('active', i === n);
+    });
+    currentStep = n;
+}
+function nextStep() {
+    showStep(currentStep + 1);
+}
+// --- Drag & Drop für Schritt 1 ---
+const dragItems = document.getElementById('drag-items');
+const zonePersonal = document.getElementById('zone-personal');
+const zoneNonPersonal = document.getElementById('zone-nonpersonal');
+const dropZones = [dragItems, zonePersonal, zoneNonPersonal];
+if (dragItems) {
+    dragItems.querySelectorAll('.choice').forEach(item => {
+        item.addEventListener('dragstart', e => {
+            e.dataTransfer.setData('text/plain', item.textContent);
+            setTimeout(() => item.style.display = 'none', 0);
+        });
+        item.addEventListener('dragend', e => {
+            item.style.display = '';
+        });
+    });
+    dropZones.forEach(zone => {
+        zone.addEventListener('dragover', e => e.preventDefault());
+        zone.addEventListener('drop', e => {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('text/plain');
+            const el = Array.from(document.querySelectorAll('.choice')).find(c => c.textContent === data);
+            if (el) zone.appendChild(el);
+        });
+    });
+}
+function checkStep1() {
+    const personal = Array.from(zonePersonal.children).map(c => c.textContent);
+    const nonpersonal = Array.from(zoneNonPersonal.children).map(c => c.textContent);
+    let ok = personal.includes('Name') && personal.includes('E-Mail-Adresse') && personal.includes('IP-Adresse') &&
+        nonpersonal.includes('Lieblingsfarbe') && nonpersonal.includes('Schuhgröße') &&
+        personal.length === 3 && nonpersonal.length === 2;
+    document.getElementById('result-step1').textContent = ok ? 'Richtig! Name, E-Mail-Adresse und IP-Adresse sind personenbezogen.' : 'Bitte prüfe deine Zuordnung noch einmal.';
+    if (ok) document.getElementById('next1').style.display = '';
+}
+// --- Schritt 2: Grundprinzipien ---
+const principleChoices = document.getElementById('principle-choices');
+if (principleChoices) {
+    principleChoices.querySelectorAll('.choice').forEach(item => {
+        item.addEventListener('click', () => {
+            item.classList.toggle('selected');
+        });
+    });
+}
+function checkStep2() {
+    const selected = Array.from(principleChoices.children).filter(c => c.classList.contains('selected')).map(c => c.textContent);
+    const correct = ['Rechtmäßigkeit der Verarbeitung', 'Datenminimierung', 'Integrität und Vertraulichkeit'];
+    let ok = correct.every(c => selected.includes(c)) && selected.length === 3;
+    document.getElementById('result-step2').textContent = ok ? 'Sehr gut! Das sind die drei Grundprinzipien.' : 'Nicht ganz richtig. Wähle genau die drei Grundprinzipien aus.';
+    if (ok) document.getElementById('next2').style.display = '';
+}
+// --- Schritt 3: Fallbeispiel ---
+const caseChoices = document.getElementById('case-choices');
+if (caseChoices) {
+    caseChoices.querySelectorAll('.choice').forEach(item => {
+        item.addEventListener('click', () => {
+            caseChoices.querySelectorAll('.choice').forEach(c => c.classList.remove('selected'));
+            item.classList.add('selected');
+        });
+    });
+}
+function checkStep3() {
+    const selected = Array.from(caseChoices.children).find(c => c.classList.contains('selected'));
+    let ok = selected && selected.textContent === 'Verstoß gegen Integrität und Vertraulichkeit';
+    document.getElementById('result-step3').textContent = ok ? 'Korrekt! Die Vertraulichkeit wurde verletzt.' : 'Das ist nicht korrekt. Überlege noch einmal.';
+    if (ok) document.getElementById('next3').style.display = '';
+}
+// --- Schritt 4: Checkliste ---
+function checkStep4() {
+    const checked = Array.from(document.querySelectorAll('input[name=tip]:checked')).map(i => i.value);
+    let ok = checked.includes('passwort') && checked.includes('bildschirm') && checked.includes('dokumente') && checked.length === 3;
+    document.getElementById('result-step4').textContent = ok ? 'Sehr gut! Das sind sinnvolle Maßnahmen.' : 'Nicht alles ist sinnvoll. Wähle nur die passenden Maßnahmen.';
+    if (ok) document.getElementById('next4').style.display = '';
+}
+// --- Schritt 5: Reflexion ---
+function checkStep5() {
+    const text = document.getElementById('reflection').value.trim();
+    if (text.length > 10) {
+        document.getElementById('result-step5').textContent = 'Danke für deine Antwort!';
+        setTimeout(() => showCertificate(), 1200);
+    } else {
+        document.getElementById('result-step5').textContent = 'Bitte schreibe einen vollständigen Satz.';
+    }
+}
+function showCertificate() {
+    // Antworten aus Schritt 1
+    const personal = Array.from(zonePersonal.children).map(c => c.textContent);
+    const nonpersonal = Array.from(zoneNonPersonal.children).map(c => c.textContent);
+    // Schritt 2
+    const selectedPrinciples = Array.from(principleChoices.children).filter(c => c.classList.contains('selected')).map(c => c.textContent);
+    // Schritt 3
+    const selectedCase = Array.from(caseChoices.children).find(c => c.classList.contains('selected'))?.textContent || '';
+    // Schritt 4
+    const checked = Array.from(document.querySelectorAll('input[name=tip]:checked')).map(i => i.parentElement.textContent.trim());
+    // Schritt 5
+    const reflection = document.getElementById('reflection').value.trim();
+    // Zertifikat-HTML
+    const cert = `
+        <h2>Dein DSGVO-Zertifikat</h2>
+        <p><strong>1. Personenbezogene Daten:</strong><br>
+        <span style='color:#2a5d9f'>${personal.join(', ') || '-'}</span> (personenbezogen)<br>
+        <span style='color:#888'>${nonpersonal.join(', ') || '-'}</span> (nicht personenbezogen)</p>
+        <p><strong>2. Deine gewählten Grundprinzipien:</strong><br>
+        ${selectedPrinciples.length ? selectedPrinciples.join(', ') : '-'}</p>
+        <p><strong>3. Fallbeispiel-Antwort:</strong><br>
+        ${selectedCase || '-'}</p>
+        <p><strong>4. Deine Maßnahmen für Datenschutz:</strong><br>
+        ${checked.length ? checked.join(',<br>') : '-'}</p>
+        <p><strong>5. Deine persönliche Reflexion:</strong><br>
+        <em>${reflection || '-'}</em></p>
+        <hr>
+        <p style='color:#2a5d9f'><strong>Herzlichen Glückwunsch!<br>Du hast die wichtigsten Grundlagen der DSGVO bearbeitet.</strong></p>
+        <button class='btn' onclick='window.print()'>Zertifikat drucken oder speichern</button>
+        <button class='btn' onclick='showStep(0)'>Zurück zum Start</button>
+    `;
+    document.getElementById('step-6').innerHTML = cert;
+    showStep(6);
+}
+</script>
+</body>
+</html>
