@@ -129,6 +129,8 @@ const dragItems = document.getElementById('drag-items');
 const zonePersonal = document.getElementById('zone-personal');
 const zoneNonPersonal = document.getElementById('zone-nonpersonal');
 const dropZones = [dragItems, zonePersonal, zoneNonPersonal];
+
+// Drag & Drop für Desktop
 if (dragItems) {
     dragItems.querySelectorAll('.choice').forEach(item => {
         item.addEventListener('dragstart', e => {
@@ -149,6 +151,35 @@ if (dragItems) {
         });
     });
 }
+
+// Touch-Unterstützung für Smartphones/Tablets
+let touchDragged = null;
+function enableTouchDnD(zone) {
+    zone.addEventListener('touchstart', function(e) {
+        const target = e.target.closest('.choice');
+        if (!target) return;
+        touchDragged = target;
+        target.classList.add('touch-dragging');
+    }, {passive: true});
+    zone.addEventListener('touchmove', function(e) {
+        // Verhindert Scrollen während Drag
+        if (touchDragged) e.preventDefault();
+    }, {passive: false});
+    zone.addEventListener('touchend', function(e) {
+        if (!touchDragged) return;
+        const touch = e.changedTouches[0];
+        const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+        // Finde die nächste Dropzone (auch wenn das Ziel ein Kind ist)
+        let dropZone = dropZones.find(z => z === dropTarget || z.contains(dropTarget));
+        if (dropZone && dropZone !== touchDragged.parentElement) {
+            dropZone.appendChild(touchDragged);
+        }
+        touchDragged.classList.remove('touch-dragging');
+        touchDragged = null;
+    });
+}
+dropZones.forEach(enableTouchDnD);
+
 function checkStep1() {
     const personal = Array.from(zonePersonal.children).map(c => c.textContent);
     const nonpersonal = Array.from(zoneNonPersonal.children).map(c => c.textContent);
@@ -221,7 +252,8 @@ function showCertificate() {
     const reflection = document.getElementById('reflection').value.trim();
     // Zertifikat-HTML
     const cert = `
-        <h2>Dein DSGVO-Zertifikat</h2>
+        <h2 style="text-align:center">Dein DSGVO-Zertifikat</h2>
+        <img src="zertifikat.jpg" alt="Zertifikat Bild" style="max-width:180px;display:block;margin:0 auto 16px auto;border-radius:8px;box-shadow:0 2px 8px #0002;" id="zertifikat-bild">
         <p><strong>1. Personenbezogene Daten:</strong><br>
         <span style='color:#2a5d9f'>${personal.join(', ') || '-'}</span> (personenbezogen)<br>
         <span style='color:#888'>${nonpersonal.join(', ') || '-'}</span> (nicht personenbezogen)</p>
